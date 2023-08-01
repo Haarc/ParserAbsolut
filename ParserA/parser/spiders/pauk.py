@@ -12,14 +12,17 @@ def parse_post(response):
     product_code = response.meta.get("product_code")
     count_data = json.loads(response.body)
     as_product_code = response.meta.get("as_product_code")
+    url = response.meta.get("url")
 
     yield {
         "ID": item_id,
         "Название товара": product_name,
-        "Цена товара": price_name,
+        "Цена товара": price_name.replace(".", ","),
         "Количество товара": count_data,
         "Код товара": product_code,
-        "Артикул": as_product_code
+        "Артикул": as_product_code,
+        "URL": url
+
     }
 
 
@@ -31,13 +34,14 @@ class PaukSpider(scrapy.Spider):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        file_path = r"C:\Users\user\PycharmProjects\ParserAbsolut\ParserA\parser\Excel_files\links_31.07.xlsx"
+        file_path = r"C:\Users\user\PycharmProjects\ParserAbsolut\ParserA\parser\Excel_files\links_products.xlsx"
         self.df = pd.read_excel(file_path)
         urls = self.df[self.df.columns[1]].tolist()  # Второй столбец содержит URL'ы
         self.start_urls.extend(urls)
 
         # Загрузка таблицы с соответствиями "Артикул Поставщика" и кодами товаров
-        code_mapping_file = r"C:\Users\user\PycharmProjects\ParserAbsolut\ParserA\parser\Excel_files\Сопоставление.xlsx"
+        code_mapping_file = (r"C:\Users\user\PycharmProjects\ParserAbsolut\ParserA\parser\Excel_files\Сопоставление1"
+                             r".xlsx")
         self.code_mapping = pd.read_excel(code_mapping_file)
         # Преобразование в словарь для удобства поиска
         self.code_mapping_dict = dict(zip(self.code_mapping['Артикул Поставщика'], self.code_mapping['Артикул']))
@@ -93,5 +97,6 @@ class PaukSpider(scrapy.Spider):
                 "price_name": price_name[1],
                 "product_code": product_code,
                 "as_product_code": as_product_code,
+                "url": response.url,
             },
         )
