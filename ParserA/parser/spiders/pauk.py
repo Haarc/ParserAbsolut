@@ -31,7 +31,7 @@ class PaukSpider(scrapy.Spider):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        file_path = r"C:\Users\user\PycharmProjects\ParserAbsolut\ParserA\parser\Excel_files\links_products_test.xlsx"
+        file_path = r"C:\Users\user\PycharmProjects\ParserAbsolut\ParserA\parser\Excel_files\links_products.xlsx"
         self.df = pd.read_excel(file_path)
         urls = self.df[self.df.columns[1]].tolist()  # Второй столбец содержит URL'ы
         self.start_urls.extend(urls)

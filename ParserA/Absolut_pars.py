@@ -19,7 +19,7 @@ def run():
 def save_and_remove():
     src = "C:/Work_parser_files/parsing.xlsx"
     dst1 = "C:/Users/user/Desktop/parsing"
-    dst2 = "//SHS/Users/Public/Documents/OZON/Парсинг"
+    dst2 = "//SHS/Users/Public/Documents/OZON/Парсинг/parsing"
 
     now = datetime.now().strftime("%d-%m-%Y")
     filename = f"parsing_{now}.xlsx"
