@@ -1,23 +1,36 @@
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 from parser.spiders.pauk import PaukSpider
+import shutil
 import os
-def run_spider():
-    process = CrawlerProcess()
+from datetime import datetime
 
-    # Установите путь к папке, где хотите сохранить файл
-    output_dir = r"C:\Users\user\Desktop\Инструкция"
 
-    # Путь к файлу для сохранения
-    file_name = "file.csv"
-    file_path = os.path.join(output_dir, file_name)
-
-    # Установите настройку FEED_URI для сохранения в указанный файл
-    settings = get_project_settings()
-    settings.set("FEED_URI", file_path)
-
+def run():
+    process = CrawlerProcess(get_project_settings())
+    process.settings.set(
+        "FEEDS",
+        {"file:///C:/Work_parser_files/parsing.xlsx": {"format": "xlsx"}},
+    )
     process.crawl(PaukSpider)
     process.start()
 
+
+def save_and_remove():
+    src = "C:/Work_parser_files/parsing.xlsx"
+    dst1 = "C:/Users/user/Desktop/parsing"
+    dst2 = "//SHS/Users/Public/Documents/OZON/Парсинг"
+
+    now = datetime.now().strftime("%d-%m-%Y")
+    filename = f"parsing_{now}.xlsx"
+
+    shutil.copy(src, f"{dst1}/{filename}")
+
+    shutil.copy(src, f"{dst2}/парсинг.xlsx")
+
+    os.remove(src)
+
+
 if __name__ == "__main__":
-    run_spider()
+    run()
+    save_and_remove()

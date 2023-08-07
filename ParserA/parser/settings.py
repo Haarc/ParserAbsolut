@@ -63,7 +63,7 @@ ROBOTSTXT_OBEY = False
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   "parser.pipelines.ParserPipeline": 300,
+    "parser.pipelines.ParserPipeline": 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -88,7 +88,7 @@ AUTOTHROTTLE_DEBUG = False
 # HTTPCACHE_STORAGE = "scrapy.extensions.httpcache.FilesystemCacheStorage"
 
 # Set settings whose default value is deprecated to a future-proof value
-REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.6"
+REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
 
@@ -105,5 +105,5 @@ SCRAPEOPS_API_KEY = "8ad7f4b8-e231-467f-a9d7-018e51d17cef"
 SCRAPEOPS_FAKE_HEADERS_ENABLED = True
 
 FEED_EXPORTERS = {
-    'xlsx': 'scrapy_xlsx.XlsxItemExporter',
+    "xlsx": "scrapy_xlsx.XlsxItemExporter",
 }
