@@ -8,7 +8,7 @@
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 BOT_NAME = "parser"
-
+SCRAPEOPS_API_KEY = "8ad7f4b8-e231-467f-a9d7-018e51d17cef"
 SPIDER_MODULES = ["parser.spiders"]
 NEWSPIDER_MODULE = "parser.spiders"
 
@@ -60,6 +60,10 @@ ROBOTSTXT_OBEY = False
 #    "scrapy.extensions.telnet.TelnetConsole": None,
 # }
 
+EXTENSIONS = {
+    "scrapeops_scrapy.extension.ScrapeOpsMonitor": 500,
+}
+
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
@@ -75,7 +79,7 @@ AUTOTHROTTLE_START_DELAY = 0.5
 AUTOTHROTTLE_MAX_DELAY = 30
 # The average number of requests Scrapy should be sending in parallel to
 # each remote server
-AUTOTHROTTLE_TARGET_CONCURRENCY = 1.7
+AUTOTHROTTLE_TARGET_CONCURRENCY = 1.6
 # Enable showing throttling stats for every response received:
 AUTOTHROTTLE_DEBUG = False
 
@@ -98,11 +102,17 @@ ROTATING_PROXY_LIST = []
 DOWNLOADER_MIDDLEWARES = {
     "scrapy.downloadermiddlewares.robotstxt.RobotsTxtMiddleware": None,
     "parser.middlewares.ScrapeOpsFakeBrowserHeadersMiddleware": 400,
+    "parser.middlewares.ScrapeOpsFakeUserAgentMiddleware": 400,
+    "scrapeops_scrapy.middleware.retry.RetryMiddleware": 550,
+    "scrapy.downloadermiddlewares.retry.RetryMiddleware": None,
 }
 
+EXTENSIONS = {
+    "scrapeops_scrapy.extension.ScrapeOpsMonitor": 500,
+}
 
-SCRAPEOPS_API_KEY = "8ad7f4b8-e231-467f-a9d7-018e51d17cef"
 SCRAPEOPS_FAKE_HEADERS_ENABLED = True
+SCRAPEOPS_FAKE_USER_AGENT_ENABLED = True
 
 FEED_EXPORTERS = {
     "xlsx": "scrapy_xlsx.XlsxItemExporter",

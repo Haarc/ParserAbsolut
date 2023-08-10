@@ -11,7 +11,7 @@ class SearchLinksSpider(scrapy.Spider):
     allowed_domains = ["absolut-tds.com"]
     start_urls = ["https://absolut-tds.com/search"]
 
-    file_path = r"c:\Users\user\Desktop\Сопоставление.xlsx"
+    file_path = r"\\SHS\Users\Public\Documents\OZON\Сопостовление\Сопоставление.xlsx"
 
     def read_product_codes_from_excel(self):
         df = pd.read_excel(self)

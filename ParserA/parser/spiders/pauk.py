@@ -6,6 +6,7 @@ import scrapy
 
 def parse_post(response):
     # Обработка ответа POST-запроса
+    item_id = response.meta.get("item_id")
     product_name = response.meta.get("product_name")
     price_name = response.meta.get("price_name")
     product_code = response.meta.get("product_code")
@@ -14,6 +15,7 @@ def parse_post(response):
     url = response.meta.get("url")
 
     yield {
+        "ID": item_id,
         "Название товара": product_name,
         "Цена товара": price_name,
         "Количество товара": count_data,
@@ -31,20 +33,15 @@ class PaukSpider(scrapy.Spider):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        file_path = r"C:\Users\user\PycharmProjects\ParserAbsolut\ParserA\parser\Excel_files\links_products.xlsx"
+        file_path = r"C:\Users\user\PycharmProjects\ParserAbsolut\ParserA\parser\Excel_files\Сопоставление.xlsx"
         self.df = pd.read_excel(file_path)
-        urls = self.df[self.df.columns[1]].tolist()  # Второй столбец содержит URL'ы
+        urls = self.df["URL"].tolist()
         self.start_urls.extend(urls)
-
         # Загрузка таблицы с соответствиями "Артикул Поставщика" и кодами товаров
-        code_mapping_file = (
-            r"C:\Users\user\PycharmProjects\ParserAbsolut\ParserA\parser\Excel_files\Сопоставление"
-            r".xlsx"
-        )
-        self.code_mapping = pd.read_excel(code_mapping_file)
+        self.df = pd.read_excel(file_path)
         # Преобразование в словарь для удобства поиска
-        self.code_mapping_dict = dict(
-            zip(self.code_mapping["Артикул Поставщика"], self.code_mapping["Артикул"])
+        self.file_path_dict = dict(
+            zip(self.df["Артикул Поставщика"], self.df["Артикул"])
         )
 
     def start_requests(self):
@@ -79,9 +76,7 @@ class PaukSpider(scrapy.Spider):
             product_code = "Нет кода товара"
 
         # Получение кодов товаров из соответствующей таблицы по "Артикулу Поставщика"
-        as_product_code = self.code_mapping_dict.get(
-            product_code, "Код товара не найден"
-        )
+        as_product_code = self.file_path_dict.get(product_code, "Код товара не найден")
 
         # Выполнение POST-запроса
         url_post = "https://absolut-tds.com/ajax/shop/check_item_quantity.php"
@@ -95,6 +90,7 @@ class PaukSpider(scrapy.Spider):
             method="POST",
             callback=parse_post,
             meta={
+                "item_id": item_id,
                 "product_name": product_name,
                 "price_name": price_name[1],
                 "product_code": product_code,
