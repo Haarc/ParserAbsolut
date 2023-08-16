@@ -1,9 +1,11 @@
+import os
+import shutil
+from datetime import datetime
+
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
+
 from parser.spiders.pauk import PaukSpider
-import shutil
-import os
-from datetime import datetime
 
 
 def run():
